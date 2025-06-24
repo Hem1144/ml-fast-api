@@ -91,6 +91,7 @@ myenv/
 venv/
 ENV/
 env.bak/
+build/
 
 # Spyder project settings
 .spyderproject
