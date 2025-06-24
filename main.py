@@ -18,6 +18,10 @@ def patient():
 def about():
     return {'message': 'API for manage patients records'}
 
+@app.get("/contact")
+def contact():
+    return {"Contact Info": "Please fell fee to contact us when needed."}
+
 
 @app.get('/view')
 def view():
