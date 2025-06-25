@@ -30,3 +30,13 @@ def view():
     return data
 
 
+@app.get('/patient/{patient_id}')
+def view_single_patient(patient_id: str):
+    data = load_data()
+    
+    print(data, "AAAAAAAAAAAAAAAAAAAAAAA")
+    
+    if patient_id in data:
+        return data[patient_id]
+    
+    return {"error": "Patient id not found"}
