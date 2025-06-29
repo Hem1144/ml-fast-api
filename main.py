@@ -1,13 +1,24 @@
 from fastapi import FastAPI, Path, HTTPException, Query
 import json
+from enum import Enum
 
 app = FastAPI()
 
 def load_data():
     with open('patients.json','r') as f:
         data = json.load(f)
-    
     return data
+
+patients_db = load_data()
+
+class SortField(str, Enum):
+    height = "height"
+    weight = "weight"
+    bmi = "bmi"
+
+class SortOrder(str, Enum):
+    asc = "asc"
+    desc = "desc"
 
 @app.get("/")
 def patient():
@@ -25,38 +36,24 @@ def contact():
 
 @app.get('/view')
 def view():
-    data = load_data()
-    
-    return data
+    return patients_db
 
 
 @app.get('/patient/{patient_id}')
 def view_single_patient(patient_id: str = Path(..., description='ID of the patient', Example='P001')):
-    data = load_data()
-        
-    if patient_id in data:
-        return data[patient_id]
+    if patient_id in patients_db:
+        return patients_db[patient_id]
     
     raise HTTPException(status_code=404, detail="Patient not found!")
 
 
 @app.get("/sort")
-def sort_patients(sort_by: str = Query(..., description='Sort the patient data on the basis of Hight, Weight or BMI'), order: str = Query('asc', description='sort in asc or desc order')):
+def sort_patients(sort_by: SortField = Query(..., description='Sort the patient data on the basis of Height, Weight or BMI'), order: SortOrder = Query(SortOrder.asc, description='Sort in asc or desc order')):
     
-    valid_fields = ['height', 'weight', 'bmi']
+    sort_order = order == SortOrder.desc
     
-    if sort_by not in valid_fields:
-        raise HTTPException(status_code=400, detail=f'Invalid field section from {valid_fields}')
+    sorted_data = sorted(patients_db.values(), key=lambda x: x.get(sort_by.value, 0), reverse=sort_order)
     
-    if order not in ['asc','desc']:
-        raise HTTPException(status_code=400, detail="Invalid order select between asc and desc")
-    
-    data = load_data()
-    
-    sort_order = True if order == 'desc' else False
-    
-    sort_data = sorted(data.values(), key=lambda x:x.get(sort_by, 0), reverse=sort_order)
-    
-    return sort_data
+    return sorted_data
     
     
