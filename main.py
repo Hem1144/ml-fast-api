@@ -25,7 +25,7 @@ def patient():
     return {'message':'Patients management system'}
 
 
-@app.get("/about")
+@app.get("/about-us")
 def about():
     return {'message': 'API for manage patients records'}
 
@@ -37,6 +37,7 @@ def contact():
 @app.get('/view')
 def view():
     return patients_db
+
 
 
 @app.get('/patient/{patient_id}')
@@ -51,9 +52,7 @@ def view_single_patient(patient_id: str = Path(..., description='ID of the patie
 def sort_patients(sort_by: SortField = Query(..., description='Sort the patient data on the basis of Height, Weight or BMI'), order: SortOrder = Query(SortOrder.asc, description='Sort in asc or desc order')):
     
     sort_order = order == SortOrder.desc
-    
     sorted_data = sorted(patients_db.values(), key=lambda x: x.get(sort_by.value, 0), reverse=sort_order)
-    
     return sorted_data
     
     
