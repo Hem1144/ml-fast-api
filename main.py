@@ -7,7 +7,7 @@ def load_data():
     # Example: Load data from a JSON file or return a sample dictionary
     # Replace this with your actual data loading logic
     try:
-        with open('data.json', 'r') as f:
+        with open('patients.json', 'r') as f:
             return json.load(f)
     except FileNotFoundError:
         # Return sample data if file not found
