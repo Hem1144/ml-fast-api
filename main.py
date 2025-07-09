@@ -4,23 +4,21 @@ import json
 app = FastAPI()
 
 def load_data():
-    with open('patients.json','r') as f:
-        data = json.load(f)
-    
-    return data
+    # Example: Load data from a JSON file or return a sample dictionary
+    # Replace this with your actual data loading logic
+    try:
+        with open('data.json', 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        # Return sample data if file not found
+        return {
+            "P001": {"name": "John Doe", "age": 30},
+            "P002": {"name": "Jane Smith", "age": 25}
+        }
 
 @app.get("/")
-def patient():
-    return {'message':'Patients management system'}
-
-
-@app.get("/about")
-def about():
-    return {'message': 'API for manage patients records'}
-
-@app.get("/contact")
-def contact():
-    return {"Contact Info": "Please fell fee to contact us when needed."}
+def contact_info():
+    return {"Contact Info": "Please feel free to contact us when needed."}
 
 
 @app.get('/view')
