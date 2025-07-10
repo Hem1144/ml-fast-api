@@ -24,7 +24,6 @@ def contact_info():
 @app.get('/view')
 def view():
     data = load_data()
-    
     return data
 
 
